@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Celesta · Zero Maps — Cosmic Explorer</title>
 <meta name="description" content="Zoomable cosmic explorer: your live Earth location → Solar System → Mars Jezero Crater. Live night sky & ISS tracking." />
 <meta property="og:title" content="Celesta · Zero Maps" />
 <meta property="og:description" content="Earth → Solar System → Mars Jezero. Zoomable cosmic explorer with live ISS tracking." />
