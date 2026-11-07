@@ -1,0 +1,23 @@
+{
+  "project": {
+    "challenge": "NASA Space Apps Challenge",
+    "summary": "Zero Maps is an experimental Mars exploration and EVA planning interface focused on Jezero Crater. It combines illustrative terrain, traverse planning, local-time and Earth–Mars light-time displays, and account-backed workspace sync."
+  },
+  "company": {
+    "name": "Celesta",
+    "tagline": "A team building tools for exploring other worlds.",
+    "about": "Celesta is the team behind Zero Maps. The project is a prototype for exploring Martian terrain and organizing mission-planning ideas. Add the team’s own approved description and links before publishing.",
+    "website": ""
+  },
+  "team": [],
+  "credits": [
+    { "label": "NASA Photojournal · Jezero Crater elevation graph (PIA26476)", "url": "https://science.nasa.gov/photojournal/jezero-crater-elevation-graph/" },
+    { "label": "NASA Mars 2020: Perseverance Rover", "url": "https://science.nasa.gov/mission/mars-2020-perseverance/" },
+    { "label": "USGS Astrogeology", "url": "https://astrogeology.usgs.gov/" }
+  ],
+  "disclosures": [
+    "The terrain, mineral hypotheses, route costs, and EVA resource margins shown in the current planner are illustrative simulations, not validated operational data or safety guidance.",
+    "Earth–Mars distance and one-way light time are computed from approximate Keplerian orbital elements. They are not a communications link prediction.",
+    "The rover profile is an approximate digitization of the cited NASA graphic. Confirm data sources and team disclosures before submission."
+  ]
+}

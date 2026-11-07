@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#111312">
+<title>About — Zero Maps · Mars Explorer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600&family=Manrope:wght@400;600;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="about.css">
+</head>
+<body>
+<header class="top">
+  <a class="wordmark" href="/"><span class="mark">Z</span> ZERO MAPS <i>MARS EXPLORER</i></a>
+  <nav><a href="/">Planner</a><a href="/about.html" aria-current="page">About</a></nav>
+</header>
+
+<main>
+  <section class="hero">
+    <p class="eyebrow" id="challenge">NASA SPACE APPS CHALLENGE 2026</p>
+    <h1>What kills you first,<br><em>and is the walk worth it?</em></h1>
+    <p class="lead" id="summary"></p>
+    <div class="live" aria-live="polite"><span class="dot"></span><span id="liveDelay">Computing live Earth–Mars light time…</span></div>
+    <a class="cta" href="/">Open the planner →</a>
+  </section>
+
+  <section>
+    <p class="eyebrow">BUILT BY</p>
+    <h2 id="companyName">Celesta</h2>
+    <p class="muted" id="companyTagline"></p>
+    <p id="companyAbout"></p>
+    <p><a id="companySite" class="link" hidden rel="noreferrer" target="_blank"></a></p>
+  </section>
+
+  <section>
+    <p class="eyebrow">THE TEAM</p>
+    <h2>People behind Zero Maps</h2>
+    <div class="grid" id="teamGrid"></div>
+  </section>
+
+  <section class="two">
+    <div>
+      <p class="eyebrow">DATA &amp; CREDITS</p>
+      <h2>Standing on NASA's work</h2>
+      <ul class="plain" id="credits"></ul>
+    </div>
+    <div>
+      <p class="eyebrow">DISCLOSURES</p>
+      <h2>Honest about the limits</h2>
+      <ul class="plain" id="disclosures"></ul>
+    </div>
+  </section>
+
+  <section>
+    <p class="eyebrow">CONTACT</p>
+    <h2>Send the team a message</h2>
+    <form id="contactForm" class="form" novalidate>
+      <label>Name<input name="name" maxlength="80" required autocomplete="name"></label>
+      <label>Email<input name="email" type="email" maxlength="320" required autocomplete="email"></label>
+      <label class="full">Message<textarea name="message" rows="5" maxlength="2000" required></textarea></label>
+      <input class="hp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <button class="cta" type="submit">Send message</button>
+      <p id="formStatus" role="status"></p>
+    </form>
+  </section>
+</main>
+
+<footer class="footer">
+  <span>ZERO MAPS · ILLUSTRATIVE EVA SIMULATION</span>
+  <span>Model outputs are not flight safety guidance</span>
+</footer>
+<script src="about.js"></script>
+</body>
+</html>
