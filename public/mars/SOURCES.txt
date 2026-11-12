@@ -1,0 +1,16 @@
+TerraScope photographic assets
+
+viking-global.jpg
+Source: https://www.mars.asu.edu/data/mdim_color/
+Eight tiles from https://www.mars.asu.edu/data/mdim_color/large/
+Original: NASA Viking color mosaic sharpened with MDIM 1.0, 64 pixels/degree, approximately 920 m/pixel.
+Credit: NASA/JPL/USGS; distributed by Arizona State University.
+Processing: eight 5760-square PNG tiles downsampled with Lanczos to 2048-square; assembled in source order (-180 to +180 east longitude, north to south) and JPEG encoded at quality 92. No generated imagery.
+Display is 8192 x 4096, approximately 2.6 km/pixel at equator. This is imagery, not elevation data.
+
+jezero-sol3.jpg
+Source: https://www.jpl.nasa.gov/images/pia24264-mastcam-zs-first-360-degree-panorama/
+Downloaded: https://d2pn8kiwq2w21t.cloudfront.net/original_images/jpegPIA24264.jpg
+Credit: NASA/JPL-Caltech/MSSS/ASU.
+142 Mastcam-Z images captured on Sol 3, February 21, 2021; stitched by mission team.
+Source JPEG: 9238 x 2451 pixels. Re-encoded at quality 95; no generated fill or geometry. Viewer preserves image proportions and wraps the horizontal 360-degree seam; it is an image panorama, not a measured walkable 3D scene. Image azimuth is not presented as a navigation compass.

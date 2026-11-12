@@ -1,0 +1,20 @@
+// Real NASA Mastcam-Z panorama. No generated pixels or invented geometry.
+export function createSurface(onExit) {
+ const host=document.createElement('section');host.id='surface-view';host.hidden=true;
+ host.innerHTML=`<canvas tabindex="0" aria-label="Perseverance photographic panorama. Drag or use arrow keys to look around. Scroll or use plus and minus to zoom."></canvas><div class="surface-top"><div><small>REAL ROVER IMAGERY / 360°</small><h2>Jezero, through Perseverance</h2><span>Mastcam-Z · Sol 3 · 21 February 2021</span></div><button id="exit-surface">↗ Return to orbit <kbd>Esc</kbd></button></div><div class="surface-bottom"><div><b>142 PHOTOGRAPHS. ONE REAL PLACE.</b><p>Drag to look around · Scroll to inspect · Arrow keys to pan</p><small>Fixed rover viewpoint · Captured image boundaries · No free walking</small><p><a href="https://www.jpl.nasa.gov/images/pia24264-mastcam-zs-first-360-degree-panorama/" target="_blank" rel="noopener">NASA/JPL-Caltech/MSSS/ASU · Source ↗</a></p></div><div class="pano-tools"><button id="pano-out" aria-label="Zoom panorama out">−</button><button id="pano-reset">Reset view</button><button id="pano-in" aria-label="Zoom panorama in">+</button></div></div><p id="surface-error" role="status">Loading NASA panorama…</p>`;
+ document.body.append(host);const canvas=host.querySelector('canvas'),ctx=canvas.getContext('2d'),img=new Image();let active=false,loaded=false,cx=4619,cy=750,zoom=1,drag=null,w=1,h=1,raf;
+ const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+ function draw(){if(!active||!loaded)return;const dpr=Math.min(devicePixelRatio,2);w=innerWidth;h=innerHeight;canvas.width=w*dpr;canvas.height=h*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);
+ // Preserve source image proportions. Wrap only the full 360° horizontal seam.
+ const scale=Math.max(w/(img.width/4),h/img.height)*zoom,sw=w/scale,sh=h/scale;cy=clamp(cy,sh/2,img.height-sh/2);cx=((cx%img.width)+img.width)%img.width;ctx.fillStyle='#101317';ctx.fillRect(0,0,w,h);const left=cx-sw/2;for(let k=-1;k<=1;k++)ctx.drawImage(img,(k*img.width-left)*scale,(sh/2-cy)*scale,img.width*scale,img.height*scale);
+ }
+ function schedule(){cancelAnimationFrame(raf);raf=requestAnimationFrame(draw);}
+ img.onload=()=>{loaded=true;host.querySelector('#surface-error').hidden=true;schedule();};img.onerror=()=>{host.querySelector('#surface-error').textContent='The NASA image could not load. Return to orbit and try again.';};
+ function change(factor){zoom=clamp(zoom*factor,.65,5);schedule();}
+ canvas.onpointerdown=e=>{canvas.focus();canvas.setPointerCapture(e.pointerId);drag={x:e.clientX,y:e.clientY};};canvas.onpointermove=e=>{if(!drag||!loaded)return;const scale=Math.max(w/(img.width/4),h/img.height)*zoom;cx-=(e.clientX-drag.x)/scale;cy-=(e.clientY-drag.y)/scale;drag={x:e.clientX,y:e.clientY};schedule();};canvas.onpointerup=canvas.onpointercancel=()=>drag=null;
+ canvas.addEventListener('wheel',e=>{e.preventDefault();change(Math.exp(-e.deltaY*.001));},{passive:false});
+ canvas.onkeydown=e=>{if(['ArrowLeft','ArrowRight','ArrowUp','ArrowDown','+','-','='].includes(e.key)){e.preventDefault();if(e.key==='ArrowLeft')cx-=150/zoom;if(e.key==='ArrowRight')cx+=150/zoom;if(e.key==='ArrowUp')cy-=100/zoom;if(e.key==='ArrowDown')cy+=100/zoom;if(e.key==='+'||e.key==='=')change(1.2);if(e.key==='-')change(1/1.2);schedule();}};
+ function exit(){active=false;host.hidden=true;document.querySelector('#app').inert=false;document.body.classList.remove('on-surface');onExit();}
+ host.querySelector('#exit-surface').onclick=exit;host.querySelector('#pano-in').onclick=()=>change(1.3);host.querySelector('#pano-out').onclick=()=>change(1/1.3);host.querySelector('#pano-reset').onclick=()=>{cx=img.width/2;cy=750;zoom=1;schedule();};document.addEventListener('keydown',e=>{if(active&&e.key==='Escape')exit();});window.addEventListener('resize',schedule);
+ return {enter(){active=true;host.hidden=false;document.querySelector('#app').inert=true;document.body.classList.add('on-surface');if(!img.src)img.src='/mars/jezero-sol3.jpg';canvas.focus();schedule();},exit};
+}

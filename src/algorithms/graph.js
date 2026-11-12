@@ -1,0 +1,9 @@
+/** 4-neighbor grid construction: O(V Z P) time for Z zones with P polygon
+ * vertices; O(V + E) space. Four neighbors prevent diagonal corner cutting.
+ * Edge risk samples endpoints and midpoint. Penalties are soft, not closures. */
+export function inside([lat,lng],polygon){let hit=false;for(let i=0,j=polygon.length-1;i<polygon.length;j=i++){const [a,b]=polygon[i],[c,d]=polygon[j];if((b>lng)!==(d>lng)&&lat<(c-a)*(lng-b)/(d-b)+a)hit=!hit;}return hit;}
+export function distance(a,b){const rad=Math.PI/180,dlat=(b[0]-a[0])*rad,dlng=(b[1]-a[1])*rad;const h=Math.sin(dlat/2)**2+Math.cos(a[0]*rad)*Math.cos(b[0]*rad)*Math.sin(dlng/2)**2;return 6371000*2*Math.atan2(Math.sqrt(h),Math.sqrt(1-h));}
+export function buildGraph(elevation,zones,avoid=true){const {values,bounds:b}=elevation,rows=values.length,cols=values[0].length,nodes=[],graph=new Map();const risk=p=>Math.max(0,...zones.filter(z=>inside(p,z.polygon)).map(z=>({Low:2,Medium:8,High:30}[z.severity])));
+ for(let r=0;r<rows;r++)for(let c=0;c<cols;c++){const coordinates=[b.south+r/(rows-1)*(b.north-b.south),b.west+c/(cols-1)*(b.east-b.west)];nodes.push({id:r*cols+c,r,c,coordinates,elevation:values[r][c],risk:risk(coordinates)});}
+ for(const n of nodes){const edges=[];for(const [dr,dc] of [[1,0],[-1,0],[0,1],[0,-1]]){const r=n.r+dr,c=n.c+dc;if(r<0||r>=rows||c<0||c>=cols)continue;const m=nodes[r*cols+c],meters=distance(n.coordinates,m.coordinates),rise=Math.abs(m.elevation-n.elevation),mid=n.coordinates.map((v,i)=>(v+m.coordinates[i])/2);const danger=Math.max(n.risk,m.risk,risk(mid));edges.push({to:m.id,weight:meters+rise*8+(avoid?meters*danger:0),meters,danger});}graph.set(n.id,edges);}return {nodes,graph};}
+export function nearest(nodes,point){return nodes.reduce((best,n)=>distance(n.coordinates,point)<distance(best.coordinates,point)?n:best,nodes[0]);}

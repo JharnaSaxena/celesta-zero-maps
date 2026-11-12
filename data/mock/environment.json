@@ -1,0 +1,252 @@
+[
+  {
+    "coordinates": [
+      13.310204081632653,
+      77.63020408163266
+    ],
+    "temperature": 28,
+    "humidity": 67,
+    "wind": 6,
+    "aqi": 36
+  },
+  {
+    "coordinates": [
+      13.310204081632653,
+      77.65061224489796
+    ],
+    "temperature": 25,
+    "humidity": 60,
+    "wind": 6,
+    "aqi": 46
+  },
+  {
+    "coordinates": [
+      13.310204081632653,
+      77.67102040816327
+    ],
+    "temperature": 27,
+    "humidity": 65,
+    "wind": 8,
+    "aqi": 36
+  },
+  {
+    "coordinates": [
+      13.310204081632653,
+      77.69142857142857
+    ],
+    "temperature": 26,
+    "humidity": 61,
+    "wind": 7,
+    "aqi": 32
+  },
+  {
+    "coordinates": [
+      13.310204081632653,
+      77.71183673469388
+    ],
+    "temperature": 25,
+    "humidity": 64,
+    "wind": 4,
+    "aqi": 39
+  },
+  {
+    "coordinates": [
+      13.33061224489796,
+      77.63020408163266
+    ],
+    "temperature": 23,
+    "humidity": 56,
+    "wind": 14,
+    "aqi": 33
+  },
+  {
+    "coordinates": [
+      13.33061224489796,
+      77.65061224489796
+    ],
+    "temperature": 27,
+    "humidity": 66,
+    "wind": 17,
+    "aqi": 43
+  },
+  {
+    "coordinates": [
+      13.33061224489796,
+      77.67102040816327
+    ],
+    "temperature": 26,
+    "humidity": 65,
+    "wind": 6,
+    "aqi": 34
+  },
+  {
+    "coordinates": [
+      13.33061224489796,
+      77.69142857142857
+    ],
+    "temperature": 28,
+    "humidity": 70,
+    "wind": 16,
+    "aqi": 49
+  },
+  {
+    "coordinates": [
+      13.33061224489796,
+      77.71183673469388
+    ],
+    "temperature": 27,
+    "humidity": 58,
+    "wind": 16,
+    "aqi": 51
+  },
+  {
+    "coordinates": [
+      13.351020408163267,
+      77.63020408163266
+    ],
+    "temperature": 24,
+    "humidity": 58,
+    "wind": 10,
+    "aqi": 39
+  },
+  {
+    "coordinates": [
+      13.351020408163267,
+      77.65061224489796
+    ],
+    "temperature": 24,
+    "humidity": 64,
+    "wind": 15,
+    "aqi": 58
+  },
+  {
+    "coordinates": [
+      13.351020408163267,
+      77.67102040816327
+    ],
+    "temperature": 24,
+    "humidity": 56,
+    "wind": 7,
+    "aqi": 49
+  },
+  {
+    "coordinates": [
+      13.351020408163267,
+      77.69142857142857
+    ],
+    "temperature": 28,
+    "humidity": 66,
+    "wind": 11,
+    "aqi": 56
+  },
+  {
+    "coordinates": [
+      13.351020408163267,
+      77.71183673469388
+    ],
+    "temperature": 27,
+    "humidity": 57,
+    "wind": 9,
+    "aqi": 36
+  },
+  {
+    "coordinates": [
+      13.371428571428572,
+      77.63020408163266
+    ],
+    "temperature": 27,
+    "humidity": 53,
+    "wind": 14,
+    "aqi": 40
+  },
+  {
+    "coordinates": [
+      13.371428571428572,
+      77.65061224489796
+    ],
+    "temperature": 26,
+    "humidity": 48,
+    "wind": 13,
+    "aqi": 32
+  },
+  {
+    "coordinates": [
+      13.371428571428572,
+      77.67102040816327
+    ],
+    "temperature": 24,
+    "humidity": 61,
+    "wind": 12,
+    "aqi": 33
+  },
+  {
+    "coordinates": [
+      13.371428571428572,
+      77.69142857142857
+    ],
+    "temperature": 23,
+    "humidity": 59,
+    "wind": 6,
+    "aqi": 40
+  },
+  {
+    "coordinates": [
+      13.371428571428572,
+      77.71183673469388
+    ],
+    "temperature": 28,
+    "humidity": 54,
+    "wind": 15,
+    "aqi": 55
+  },
+  {
+    "coordinates": [
+      13.391836734693879,
+      77.63020408163266
+    ],
+    "temperature": 27,
+    "humidity": 64,
+    "wind": 13,
+    "aqi": 41
+  },
+  {
+    "coordinates": [
+      13.391836734693879,
+      77.65061224489796
+    ],
+    "temperature": 27,
+    "humidity": 64,
+    "wind": 16,
+    "aqi": 59
+  },
+  {
+    "coordinates": [
+      13.391836734693879,
+      77.67102040816327
+    ],
+    "temperature": 26,
+    "humidity": 48,
+    "wind": 6,
+    "aqi": 60
+  },
+  {
+    "coordinates": [
+      13.391836734693879,
+      77.69142857142857
+    ],
+    "temperature": 27,
+    "humidity": 61,
+    "wind": 14,
+    "aqi": 48
+  },
+  {
+    "coordinates": [
+      13.391836734693879,
+      77.71183673469388
+    ],
+    "temperature": 26,
+    "humidity": 63,
+    "wind": 5,
+    "aqi": 57
+  }
+]

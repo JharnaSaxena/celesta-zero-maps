@@ -1,0 +1,2 @@
+import {distance} from '../algorithms/graph.js';
+export function InfoPanel(point,environment,node){const cell=environment.reduce((a,b)=>distance(point,a.coordinates)<distance(point,b.coordinates)?a:b);document.querySelector('#coordinates').textContent=`${point[0].toFixed(4)}° N, ${point[1].toFixed(4)}° E`;for(const key of ['temperature','humidity','wind','aqi'])document.querySelector(`#${key}`).textContent=cell[key];document.querySelector('#altitude').textContent=`${node.elevation.toLocaleString()} m`;}

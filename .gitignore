@@ -1,0 +1,4 @@
+node_modules/
+dist/
+.openai/site-workflow/
+*.zip
