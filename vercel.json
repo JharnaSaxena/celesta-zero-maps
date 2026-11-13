@@ -1,0 +1,9 @@
+{
+  "version": 2,
+  "rewrites": [
+    { "source": "/api/(.*)", "destination": "/api/index.py" },
+    { "source": "/docs", "destination": "/api/index.py" },
+    { "source": "/mars/(.*)", "destination": "/public/mars/$1" },
+    { "source": "/earth", "destination": "/earth.html" }
+  ]
+}

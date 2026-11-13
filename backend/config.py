@@ -6,7 +6,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 BACKEND_DIR = Path(__file__).resolve().parent
 DATA_DIR = BASE_DIR / "data"
 MOCK_DATA_DIR = DATA_DIR / "mock"
-DB_PATH = os.environ.get("JEZERO_DB_PATH", str(DATA_DIR / "jezero.db"))
+
+# In serverless environments like Vercel, the local filesystem is read-only except /tmp
+if os.environ.get("VERCEL"):
+    DB_PATH = os.environ.get("JEZERO_DB_PATH", "/tmp/jezero.db")
+else:
+    DB_PATH = os.environ.get("JEZERO_DB_PATH", str(DATA_DIR / "jezero.db"))
 
 # Mars & Jezero Crater Scientific Constants
 JEZERO_LAT = 18.38       # Degrees North
