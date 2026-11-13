@@ -1,1 +1,25 @@
-{"name":"terrascope","version":"1.0.0","private":true,"type":"module","scripts":{"dev":"vite --host 0.0.0.0","build":"vite build","test":"vitest run","generate":"node scripts/generate-data.js"},"dependencies":{"leaflet":"1.9.4","three":"0.180.0"},"devDependencies":{"vite":"6.1.0","vitest":"3.0.5"}}
+{
+  "name": "terrascope-jezero-backend",
+  "version": "2.4.0",
+  "private": true,
+  "type": "module",
+  "description": "Jezero Carter Mission Operations Backend & TerraScope Explorer",
+  "scripts": {
+    "start": "python run_backend.py",
+    "backend": "python run_backend.py",
+    "server": "python run_backend.py",
+    "test:backend": "python -m pytest tests/test_backend.py -v",
+    "dev": "vite --host 0.0.0.0",
+    "build": "vite build",
+    "test": "vitest run",
+    "generate": "node scripts/generate-data.js"
+  },
+  "dependencies": {
+    "leaflet": "1.9.4",
+    "three": "0.180.0"
+  },
+  "devDependencies": {
+    "vite": "6.1.0",
+    "vitest": "3.0.5"
+  }
+}

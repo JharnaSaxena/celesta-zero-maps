@@ -5,7 +5,12 @@ import {MapView} from './components/MapView.js';
 import {LayerSwitcher} from './components/LayerSwitcher.js';
 import {InfoPanel} from './components/InfoPanel.js';
 import {RoutePanel} from './components/RoutePanel.js';
-import './styles/main.css';
+if (!document.querySelector('link[href*="main.css"]')) {
+  const link = document.createElement('link');
+  link.rel = 'stylesheet';
+  link.href = '/src/styles/main.css';
+  document.head.appendChild(link);
+}
 document.querySelector('#app').innerHTML=`
 <header><a class="brand" href="./"><span class="brand-symbol">◬</span> TerraScope<span class="brand-divider"></span><small>TERRAIN INTELLIGENCE</small></a><div class="header-right"><span class="status-dot"></span> Exploration workspace <span class="mock-badge">MOCK DATA</span></div></header>
 <div class="workspace"><aside><div class="eyebrow">FIELD EXPLORER <span>01 / INDIA</span></div><h1>A clearer view.<br>A smarter route.</h1><p class="intro">Explore the landscape. Understand the terrain.<br>Find your way forward.</p>
@@ -24,6 +29,49 @@ function markers(){view.clear();if(start)view.point(start.coordinates,'A');if(en
 function select(which,p){const n=nearest(network.nodes,p);if(which==='start')start=n;else end=n;document.querySelector(`#${which}-label`).textContent=`${n.coordinates[0].toFixed(4)}, ${n.coordinates[1].toFixed(4)}`;lastRoute=[];document.querySelector('#route-result').hidden=true;markers();document.querySelector('#plan').disabled=!(start&&end);}
 const view=MapView(elevation,minerals,dangerZones,p=>{if(!inBounds(p)){message('Choose a point inside the dashed study area.');return;}InfoPanel(p,environment,nearest(network.nodes,p));if(mode){select(mode,p);mode=null;document.querySelectorAll('.route-inputs button').forEach(b=>b.classList.remove('selecting'));message(start&&end?'Ready to calculate your route.':'Select the other endpoint to continue.');}else message('Conditions updated · Select a route endpoint in the planner.');});
 LayerSwitcher(view);InfoPanel([13.35,77.67],environment,nearest(network.nodes,[13.35,77.67]));
-function plan(){if(!start||!end)return;network=buildGraph(elevation,dangerZones,document.querySelector('#avoid').checked);const result=dijkstra(network.graph,start.id,end.id);if(!result){message('No reachable route between these points.');return;}lastRoute=result.path.map(i=>network.nodes[i]);let meters=0,ascent=0,exposed=false;for(let i=1;i<lastRoute.length;i++){const a=lastRoute[i-1],b=lastRoute[i];meters+=distance(a.coordinates,b.coordinates);ascent+=Math.max(0,b.elevation-a.elevation);exposed ||=network.graph.get(a.id).find(e=>e.to===b.id).danger>0;}exposed ||=lastRoute.some(n=>n.risk>0);document.querySelector('#distance').textContent=`${(meters/1000).toFixed(2)} km`;document.querySelector('#time').textContent=`${Math.round(meters/4000*60+ascent/600*60)} min`;document.querySelector('#route-note').textContent=`${Math.round(ascent)} m ascent · ${result.visited.toLocaleString()} nodes explored. ${exposed?'Crosses simulated risk areas.':'No simulated danger zones crossed.'} Time assumes 4 km/h + ascent allowance.`;document.querySelector('#route-result').hidden=false;view.draw(lastRoute.map(n=>n.coordinates));document.querySelector('#steps').textContent=`${lastRoute.length} grid points · Dijkstra weighted route`;message('Route calculated · Shortest weighted cost, not road directions.');}
+async function plan(){
+  if(!start||!end)return;
+  const avoid=document.querySelector('#avoid').checked;
+  try {
+    const res=await fetch('/api/earth/route',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({start:start.coordinates,end:end.coordinates,avoid_danger:avoid})
+    });
+    if(res.ok){
+      const apiRoute=await res.json();
+      if(apiRoute.waypoints&&apiRoute.waypoints.length){
+        lastRoute=apiRoute.waypoints.map(w=>nearest(network.nodes,[w.latitude,w.longitude]));
+        document.querySelector('#distance').textContent=`${apiRoute.distance_km} km`;
+        document.querySelector('#time').textContent=`${apiRoute.estimated_walking_time_minutes} min`;
+        document.querySelector('#route-note').textContent=`${Math.round(apiRoute.total_ascent_m)} m ascent · JezeroOps Earth API route. ${apiRoute.crosses_danger_zone?'Crosses simulated risk areas.':'No simulated danger zones crossed.'}`;
+        document.querySelector('#route-result').hidden=false;
+        view.draw(lastRoute.map(n=>n.coordinates));
+        document.querySelector('#steps').textContent=`${lastRoute.length} grid points · Backend Dijkstra route`;
+        message('Route calculated via JezeroOps Earth API.');
+        return;
+      }
+    }
+  } catch(e){}
+  network=buildGraph(elevation,dangerZones,avoid);
+  const result=dijkstra(network.graph,start.id,end.id);
+  if(!result){message('No reachable route between these points.');return;}
+  lastRoute=result.path.map(i=>network.nodes[i]);
+  let meters=0,ascent=0,exposed=false;
+  for(let i=1;i<lastRoute.length;i++){
+    const a=lastRoute[i-1],b=lastRoute[i];
+    meters+=distance(a.coordinates,b.coordinates);
+    ascent+=Math.max(0,b.elevation-a.elevation);
+    exposed ||=network.graph.get(a.id).find(e=>e.to===b.id).danger>0;
+  }
+  exposed ||=lastRoute.some(n=>n.risk>0);
+  document.querySelector('#distance').textContent=`${(meters/1000).toFixed(2)} km`;
+  document.querySelector('#time').textContent=`${Math.round(meters/4000*60+ascent/600*60)} min`;
+  document.querySelector('#route-note').textContent=`${Math.round(ascent)} m ascent · ${result.visited.toLocaleString()} nodes explored. ${exposed?'Crosses simulated risk areas.':'No simulated danger zones crossed.'} Time assumes 4 km/h + ascent allowance.`;
+  document.querySelector('#route-result').hidden=false;
+  view.draw(lastRoute.map(n=>n.coordinates));
+  document.querySelector('#steps').textContent=`${lastRoute.length} grid points · Dijkstra weighted route`;
+  message('Route calculated · Shortest weighted cost, not road directions.');
+}
 RoutePanel({pick(which){mode=which;document.querySelectorAll('.route-inputs button').forEach(b=>b.classList.toggle('selecting',b.id===`${which}-pick`));message(`Click inside the study area to set your ${which==='start'?'start point':'destination'}.`);},plan,reset(){start=end=mode=null;lastRoute=[];view.clear();for(const s of ['start','end'])document.querySelector(`#${s}-label`).textContent='Select on map';document.querySelectorAll('.selecting').forEach(b=>b.classList.remove('selecting'));document.querySelector('#plan').disabled=true;document.querySelector('#route-result').hidden=true;message('Click the map to inspect local conditions');},replay(){if(lastRoute.length)view.draw(lastRoute.map(n=>n.coordinates),true,i=>document.querySelector('#steps').textContent=`Step ${i} of ${lastRoute.length}`);},demo(){select('start',[13.315,77.635]);select('end',[13.385,77.705]);plan();}});
 document.querySelector('#view3d').onclick=async()=>{const {View3D}=await import('./components/View3D.js');View3D(elevation,lastRoute);};document.querySelector('#close3d').onclick=()=>document.querySelector('#terrain-dialog').close();document.querySelector('#vr').onclick=()=>document.querySelector('#vr-dialog').showModal();document.querySelector('#closevr').onclick=()=>document.querySelector('#vr-dialog').close();

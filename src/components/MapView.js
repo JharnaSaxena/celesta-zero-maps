@@ -1,5 +1,10 @@
 import L from 'leaflet';
-import 'leaflet/dist/leaflet.css';
+if (!document.querySelector('link[href*="leaflet.css"]')) {
+  const link = document.createElement('link');
+  link.rel = 'stylesheet';
+  link.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
+  document.head.appendChild(link);
+}
 export const elevationColor=v=>{const t=Math.max(0,Math.min(1,(v-750)/500));return `hsl(${165-t*135},${30+t*35}%,${76-t*32}%)`;};
 export function MapView(elevation,minerals,zones,onClick){
  const b=elevation.bounds,bounds=[[b.south,b.west],[b.north,b.east]];

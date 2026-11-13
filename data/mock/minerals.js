@@ -1,0 +1,144 @@
+const data = [
+  {
+    "id": 1,
+    "name": "Granite ridge",
+    "coordinates": [
+      13.361147228511031,
+      77.67565422780727
+    ],
+    "composition": {
+      "Quartz": 48,
+      "Feldspar": 26,
+      "Mica": 17,
+      "Other": 9
+    }
+  },
+  {
+    "id": 2,
+    "name": "Eastern outcrop",
+    "coordinates": [
+      13.372806793520684,
+      77.67257562227091
+    ],
+    "composition": {
+      "Quartz": 52,
+      "Feldspar": 22,
+      "Mica": 14,
+      "Other": 12
+    }
+  },
+  {
+    "id": 3,
+    "name": "Quartz basin",
+    "coordinates": [
+      13.324090682348352,
+      77.63458602090633
+    ],
+    "composition": {
+      "Quartz": 43,
+      "Feldspar": 22,
+      "Mica": 11,
+      "Other": 24
+    }
+  },
+  {
+    "id": 4,
+    "name": "Mica terrace",
+    "coordinates": [
+      13.336773989447963,
+      77.68952796920098
+    ],
+    "composition": {
+      "Quartz": 50,
+      "Feldspar": 34,
+      "Mica": 15,
+      "Other": 1
+    }
+  },
+  {
+    "id": 5,
+    "name": "Feldspar shelf",
+    "coordinates": [
+      13.363599253780855,
+      77.66185319852978
+    ],
+    "composition": {
+      "Quartz": 46,
+      "Feldspar": 26,
+      "Mica": 17,
+      "Other": 11
+    }
+  },
+  {
+    "id": 6,
+    "name": "Southern seam",
+    "coordinates": [
+      13.374886951130359,
+      77.69173596665415
+    ],
+    "composition": {
+      "Quartz": 37,
+      "Feldspar": 29,
+      "Mica": 16,
+      "Other": 18
+    }
+  },
+  {
+    "id": 7,
+    "name": "Western spur",
+    "coordinates": [
+      13.320586083288667,
+      77.69288421891791
+    ],
+    "composition": {
+      "Quartz": 37,
+      "Feldspar": 20,
+      "Mica": 10,
+      "Other": 33
+    }
+  },
+  {
+    "id": 8,
+    "name": "Valley deposit",
+    "coordinates": [
+      13.38834284394837,
+      77.67262094441307
+    ],
+    "composition": {
+      "Quartz": 39,
+      "Feldspar": 33,
+      "Mica": 13,
+      "Other": 15
+    }
+  },
+  {
+    "id": 9,
+    "name": "Summit sample",
+    "coordinates": [
+      13.37788537929823,
+      77.69112847736238
+    ],
+    "composition": {
+      "Quartz": 42,
+      "Feldspar": 26,
+      "Mica": 13,
+      "Other": 19
+    }
+  },
+  {
+    "id": 10,
+    "name": "Northern bed",
+    "coordinates": [
+      13.335721845883516,
+      77.65655167411614
+    ],
+    "composition": {
+      "Quartz": 49,
+      "Feldspar": 30,
+      "Mica": 15,
+      "Other": 6
+    }
+  }
+]
+;
+export default data;

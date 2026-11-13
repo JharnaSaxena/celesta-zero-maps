@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TerraScope Mars — Jezero Crater Operations API</title>
+  <link rel="stylesheet" href="https://unpkg.com/swagger-ui-dist@5.11.0/swagger-ui.css" />
+  <style>
+    :root {
+      --bg-dark: #0f1117;
+      --card-bg: #181b24;
+      --border: #262a36;
+      --mars-red: #c85a44;
+      --mars-accent: #e07a5f;
+      --text: #e1e4ea;
+      --text-muted: #8c93a4;
+      --favorable: #409c7e;
+    }
+    body {
+      margin: 0;
+      padding: 0;
+      background: var(--bg-dark);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+    header {
+      background: linear-gradient(180deg, #181c26 0%, #11141c 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 24px 32px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+    }
+    .brand-group h1 {
+      margin: 0;
+      font-size: 1.4rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .brand-group h1 span {
+      color: var(--mars-accent);
+      font-weight: 800;
+    }
+    .badge {
+      font-size: 0.7rem;
+      padding: 3px 8px;
+      background: rgba(224, 122, 95, 0.2);
+      color: var(--mars-accent);
+      border: 1px solid rgba(224, 122, 95, 0.4);
+      border-radius: 4px;
+      letter-spacing: 0.05em;
+    }
+    .subtitle {
+      margin: 6px 0 0;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+    .telemetry-bar {
+      display: flex;
+      gap: 20px;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-size: 0.82rem;
+    }
+    .telemetry-item b {
+      color: var(--text);
+      display: block;
+      font-size: 0.95rem;
+    }
+    .telemetry-item small {
+      color: var(--text-muted);
+      text-transform: uppercase;
+      font-size: 0.68rem;
+      letter-spacing: 0.04em;
+    }
+    .links-bar {
+      display: flex;
+      gap: 12px;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+    .btn-primary {
+      background: var(--mars-red);
+      color: #fff;
+    }
+    .btn-primary:hover {
+      background: #b34633;
+    }
+    .btn-outline {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text);
+    }
+    .btn-outline:hover {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: #404658;
+    }
+    #swagger-ui {
+      max-width: 1300px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+    /* Dark Swagger Styling */
+    .swagger-ui {
+      filter: invert(88%) hue-rotate(180deg);
+    }
+    .swagger-ui .topbar { display: none; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand-group">
+      <h1>TERRASCOPE <span>JEZERO CRATER</span> <span class="badge">API v2.4</span></h1>
+      <p class="subtitle">Mars Surface Navigation, LIFELINE Safety Assessment, Rover Telemetry & Weather Backend</p>
+    </div>
+
+    <div class="telemetry-bar" id="telemetry-bar">
+      <div class="telemetry-item">
+        <small>Target Crater</small>
+        <b>Jezero (18.38°N)</b>
+      </div>
+      <div class="telemetry-item">
+        <small>Mars Sol</small>
+        <b id="mars-sol">—</b>
+      </div>
+      <div class="telemetry-item">
+        <small>Solar Time</small>
+        <b id="mars-time">—</b>
+      </div>
+      <div class="telemetry-item">
+        <small>Temperature</small>
+        <b id="mars-temp">—</b>
+      </div>
+      <div class="telemetry-item">
+        <small>Rover Status</small>
+        <b id="rover-status" style="color:var(--favorable)">Nominal</b>
+      </div>
+    </div>
+
+    <div class="links-bar">
+      <a href="/api/info" class="btn btn-outline" target="_blank">Mission Info ↗</a>
+      <a href="/api/export/geojson" class="btn btn-outline" target="_blank">GeoJSON ↗</a>
+      <a href="http://localhost:5173" class="btn btn-primary" target="_blank">Launch 3D Explorer ↗</a>
+    </div>
+  </header>
+
+  <div id="swagger-ui"></div>
+
+  <script src="https://unpkg.com/swagger-ui-dist@5.11.0/swagger-ui-bundle.js"></script>
+  <script>
+    window.onload = () => {
+      window.ui = SwaggerUIBundle({
+        url: "/api/openapi.json",
+        dom_id: "#swagger-ui",
+        deepLinking: true,
+        presets: [
+          SwaggerUIBundle.presets.apis,
+          SwaggerUIBundle.SwaggerUIStandalonePreset
+        ],
+        layout: "BaseLayout",
+        defaultModelsExpandDepth: -1,
+        docExpansion: "list"
+      });
+
+      // Fetch live Mars clock and weather for header
+      async function updateClock() {
+        try {
+          const [timeRes, weatherRes] = await Promise.all([
+            fetch('/api/mars/telemetry/time').then(r => r.json()),
+            fetch('/api/mars/weather/current').then(r => r.json())
+          ]);
+          document.getElementById('mars-sol').textContent = `Sol ${timeRes.current_sol}`;
+          document.getElementById('mars-time').textContent = timeRes.local_solar_time.split(' ')[0];
+          document.getElementById('mars-temp').textContent = `${weatherRes.current_temp_c}°C`;
+        } catch (e) {
+          console.warn("Telemetry polling:", e);
+        }
+      }
+      updateClock();
+      setInterval(updateClock, 5000);
+    };
+  </script>
+</body>
+</html>

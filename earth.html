@@ -1,1 +1,24 @@
-<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#102d2a"><title>TerraScope · Terrain intelligence</title><meta name="description" content="Explore a simulated landscape, inspect environmental layers and plan terrain-aware routes."></head><body><div id="app"></div><script type="module" src="/src/earth-main.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#102d2a">
+  <title>TerraScope · Terrain intelligence</title>
+  <meta name="description" content="Explore a simulated landscape, inspect environmental layers and plan terrain-aware routes.">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <link rel="stylesheet" href="/src/styles/main.css">
+  <script type="importmap">
+    {
+      "imports": {
+        "leaflet": "https://esm.sh/leaflet@1.9.4",
+        "three": "https://esm.sh/three@0.180.0"
+      }
+    }
+  </script>
+</head>
+<body>
+  <div id="app"></div>
+  <script type="module" src="/src/earth-main.js"></script>
+</body>
+</html>
