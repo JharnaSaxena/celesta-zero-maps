@@ -1,17 +1,51 @@
 {
   "version": 2,
-  "framework": null,
-  "buildCommand": null,
-  "outputDirectory": ".",
-  "functions": {
-    "api/index.py": {
-      "includeFiles": "backend/**,data/**,public/**,src/**,*.html"
+  "builds": [
+    {
+      "src": "api/index.py",
+      "use": "@vercel/python"
+    },
+    {
+      "src": "index.html",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "earth.html",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "src/**",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "public/**",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "data/**",
+      "use": "@vercel/static"
     }
-  },
-  "rewrites": [
-    { "source": "/api/(.*)", "destination": "/api/index" },
-    { "source": "/docs", "destination": "/api/index" },
-    { "source": "/mars/(.*)", "destination": "/public/mars/$1" },
-    { "source": "/earth", "destination": "/earth.html" }
+  ],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "api/index.py"
+    },
+    {
+      "src": "/docs",
+      "dest": "api/index.py"
+    },
+    {
+      "src": "/mars/(.*)",
+      "dest": "public/mars/$1"
+    },
+    {
+      "src": "/earth",
+      "dest": "earth.html"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/$1"
+    }
   ]
 }

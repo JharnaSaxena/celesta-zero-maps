@@ -15,8 +15,8 @@ from backend.app import app as flask_app
 
 class VercelPathFixMiddleware:
     """
-    Vercel rewrites (e.g., /api/(.*) -> /api/index) deliver the destination path
-    in PATH_INFO, but pass the actual requested client path in HTTP_X_MATCHED_PATH.
+    Vercel rewrites deliver the destination path in PATH_INFO,
+    but pass the actual requested client path in HTTP_X_MATCHED_PATH or RAW_URI.
     This WSGI middleware restores the real requested path so Flask's route matching works.
     It also catches any unhandled exceptions to prevent 500 FUNCTION_INVOCATION_FAILED.
     """
@@ -28,6 +28,10 @@ class VercelPathFixMiddleware:
         matched_path = environ.get("HTTP_X_MATCHED_PATH")
         if matched_path:
             environ["PATH_INFO"] = matched_path
+        elif environ.get("PATH_INFO") in ("/api/index.py", "/api/index", "/api/"):
+            raw_uri = environ.get("RAW_URI", "") or environ.get("REQUEST_URI", "")
+            if raw_uri and not raw_uri.startswith("/api/index"):
+                environ["PATH_INFO"] = raw_uri.split("?")[0]
 
         try:
             return self.wsgi_app(environ, start_response)
