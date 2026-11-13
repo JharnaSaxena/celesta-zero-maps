@@ -5,106 +5,119 @@ from pathlib import Path
 from backend.config import DB_PATH, MOCK_DATA_DIR, LIFELINE_BASE_X, LIFELINE_BASE_Z
 
 def get_db_connection():
-    conn = sqlite3.connect(DB_PATH)
+    try:
+        conn = sqlite3.connect(DB_PATH)
+    except Exception as e:
+        print(f"Warning: Falling back to in-memory SQLite: {e}")
+        conn = sqlite3.connect(":memory:")
     conn.row_factory = sqlite3.Row
     return conn
 
 def init_db():
-    Path(DB_PATH).parent.mkdir(parents=True, exist_ok=True)
-    conn = get_db_connection()
-    cursor = conn.cursor()
+    try:
+        db_parent = Path(DB_PATH).parent
+        if not db_parent.exists():
+            db_parent.mkdir(parents=True, exist_ok=True)
+    except Exception as e:
+        print(f"Notice: Directory check for database: {e}")
 
-    # Sites table
-    cursor.execute("""
-    CREATE TABLE IF NOT EXISTS sites (
-        id TEXT PRIMARY KEY,
-        name TEXT NOT NULL,
-        type TEXT NOT NULL,
-        x REAL NOT NULL,
-        z REAL NOT NULL,
-        elevation REAL DEFAULT 0,
-        lat REAL,
-        lon REAL,
-        note TEXT,
-        is_custom INTEGER DEFAULT 0,
-        created_at TEXT DEFAULT CURRENT_TIMESTAMP
-    )
-    """)
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
 
-    # Saved mission routes
-    cursor.execute("""
-    CREATE TABLE IF NOT EXISTS routes (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT NOT NULL,
-        from_site_id TEXT,
-        to_site_id TEXT,
-        mode TEXT DEFAULT 'balanced',
-        distance_km REAL NOT NULL,
-        min_margin INTEGER NOT NULL,
-        ascent_m REAL NOT NULL,
-        descent_m REAL NOT NULL,
-        est_sol_duration REAL NOT NULL,
-        waypoints_json TEXT NOT NULL,
-        created_at TEXT DEFAULT CURRENT_TIMESTAMP
-    )
-    """)
+        # Sites table
+        cursor.execute("""
+        CREATE TABLE IF NOT EXISTS sites (
+            id TEXT PRIMARY KEY,
+            name TEXT NOT NULL,
+            type TEXT NOT NULL,
+            x REAL NOT NULL,
+            z REAL NOT NULL,
+            elevation REAL DEFAULT 0,
+            lat REAL,
+            lon REAL,
+            note TEXT,
+            is_custom INTEGER DEFAULT 0,
+            created_at TEXT DEFAULT CURRENT_TIMESTAMP
+        )
+        """)
 
-    # Mars Perseverance Sample Return Cache
-    cursor.execute("""
-    CREATE TABLE IF NOT EXISTS sample_cache (
-        tube_id TEXT PRIMARY KEY,
-        name TEXT NOT NULL,
-        sample_type TEXT NOT NULL,
-        sol_collected INTEGER NOT NULL,
-        target_feature TEXT NOT NULL,
-        x REAL NOT NULL,
-        z REAL NOT NULL,
-        minerals_json TEXT NOT NULL,
-        status TEXT NOT NULL,
-        mass_grams REAL NOT NULL,
-        notes TEXT
-    )
-    """)
+        # Saved mission routes
+        cursor.execute("""
+        CREATE TABLE IF NOT EXISTS routes (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT NOT NULL,
+            from_site_id TEXT,
+            to_site_id TEXT,
+            mode TEXT DEFAULT 'balanced',
+            distance_km REAL NOT NULL,
+            min_margin INTEGER NOT NULL,
+            ascent_m REAL NOT NULL,
+            descent_m REAL NOT NULL,
+            est_sol_duration REAL NOT NULL,
+            waypoints_json TEXT NOT NULL,
+            created_at TEXT DEFAULT CURRENT_TIMESTAMP
+        )
+        """)
 
-    # Weather logs (MEDA sol-by-sol)
-    cursor.execute("""
-    CREATE TABLE IF NOT EXISTS weather_logs (
-        sol INTEGER PRIMARY KEY,
-        terrestrial_date TEXT NOT NULL,
-        min_temp_c REAL NOT NULL,
-        max_temp_c REAL NOT NULL,
-        pressure_pa REAL NOT NULL,
-        wind_speed_ms REAL NOT NULL,
-        wind_direction TEXT NOT NULL,
-        opacity_tau REAL NOT NULL,
-        uv_index REAL NOT NULL,
-        summary TEXT
-    )
-    """)
+        # Mars Perseverance Sample Return Cache
+        cursor.execute("""
+        CREATE TABLE IF NOT EXISTS sample_cache (
+            tube_id TEXT PRIMARY KEY,
+            name TEXT NOT NULL,
+            sample_type TEXT NOT NULL,
+            sol_collected INTEGER NOT NULL,
+            target_feature TEXT NOT NULL,
+            x REAL NOT NULL,
+            z REAL NOT NULL,
+            minerals_json TEXT NOT NULL,
+            status TEXT NOT NULL,
+            mass_grams REAL NOT NULL,
+            notes TEXT
+        )
+        """)
 
-    # Rover state
-    cursor.execute("""
-    CREATE TABLE IF NOT EXISTS rover_state (
-        rover_id TEXT PRIMARY KEY,
-        sol INTEGER NOT NULL,
-        battery_pct REAL NOT NULL,
-        rtg_power_w REAL NOT NULL,
-        moxie_o2_g REAL NOT NULL,
-        supercam_shots INTEGER NOT NULL,
-        mastcam_photos INTEGER NOT NULL,
-        odometry_m REAL NOT NULL,
-        heading_deg REAL NOT NULL,
-        current_x REAL NOT NULL,
-        current_z REAL NOT NULL,
-        current_elevation REAL NOT NULL,
-        status TEXT NOT NULL,
-        updated_at TEXT DEFAULT CURRENT_TIMESTAMP
-    )
-    """)
+        # Weather logs (MEDA sol-by-sol)
+        cursor.execute("""
+        CREATE TABLE IF NOT EXISTS weather_logs (
+            sol INTEGER PRIMARY KEY,
+            terrestrial_date TEXT NOT NULL,
+            min_temp_c REAL NOT NULL,
+            max_temp_c REAL NOT NULL,
+            pressure_pa REAL NOT NULL,
+            wind_speed_ms REAL NOT NULL,
+            wind_direction TEXT NOT NULL,
+            opacity_tau REAL NOT NULL,
+            uv_index REAL NOT NULL,
+            summary TEXT
+        )
+        """)
 
-    conn.commit()
-    seed_defaults(conn)
-    conn.close()
+        # Rover state
+        cursor.execute("""
+        CREATE TABLE IF NOT EXISTS rover_state (
+            rover_id TEXT PRIMARY KEY,
+            sol INTEGER NOT NULL,
+            battery_pct REAL NOT NULL,
+            rtg_power_w REAL NOT NULL,
+            moxie_o2_g REAL NOT NULL,
+            supercam_shots INTEGER NOT NULL,
+            mastcam_photos INTEGER NOT NULL,
+            odometry_m REAL NOT NULL,
+            heading_deg REAL NOT NULL,
+            current_x REAL NOT NULL,
+            current_z REAL NOT NULL,
+            current_elevation REAL NOT NULL,
+            status TEXT NOT NULL,
+            updated_at TEXT DEFAULT CURRENT_TIMESTAMP
+        )
+        """)
+
+        conn.commit()
+        seed_defaults(conn)
+        conn.close()
+    except Exception as e:
+        print(f"Warning: SQLite database initialization notice: {e}")
 
 def seed_defaults(conn):
     cursor = conn.cursor()

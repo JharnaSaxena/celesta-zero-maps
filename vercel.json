@@ -1,8 +1,16 @@
 {
   "version": 2,
+  "framework": null,
+  "buildCommand": null,
+  "outputDirectory": ".",
+  "functions": {
+    "api/index.py": {
+      "includeFiles": "backend/**,data/**,public/**,src/**,*.html"
+    }
+  },
   "rewrites": [
-    { "source": "/api/(.*)", "destination": "/api/index.py" },
-    { "source": "/docs", "destination": "/api/index.py" },
+    { "source": "/api/(.*)", "destination": "/api/index" },
+    { "source": "/docs", "destination": "/api/index" },
     { "source": "/mars/(.*)", "destination": "/public/mars/$1" },
     { "source": "/earth", "destination": "/earth.html" }
   ]
